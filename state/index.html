@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器状态 - 8B1T</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #222;
+            padding: 10px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .nav {
+            background-color: #444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 20px;
+        }
+        .status-item {
+            margin-bottom: 20px; /* 使得每个服务器状态之间有额外的空行 */
+        }
+        .server-name {
+            margin-top: 0;
+        }
+        .server-status {
+            margin: 0;
+        }
+        .server-address {
+            font-style: italic;
+            color: #ddd;
+        }
+        .online {
+            color: green;
+        }
+        .offline {
+            color: red;
+        }
+        .footer {
+            background-color: #222;
+            color: #aaa;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>8B1T Minecraft Server</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="/">首页</a>
+        <a href="/about">关于</a>
+        <a href="/download">下载</a>
+        <a href="/state">服务器状态</a>
+        <a href="/support">联系我们</a>
+    </div>
+    <div class="content">
+        <h2>服务器状态</h2>
+        <div id="Java 1.20.4" class="status-item">
+            <p class="server-name">8B1T主服务器</p>
+            <p class="server-status">状态: 检查中...</p>
+            <p class="server-address">地址: 8b1t.top</p>
+        </div>
+        <div id="Java 1.20.1" class="status-item">
+            <p class="server-name">1.20.1原版服务器</p>
+            <p class="server-status">状态: 检查中...</p>
+            <p class="server-address">地址: 1201.8b1t.top</p>
+        </div>
+        <div id="Java 1.20.1 Forge" class="status-item">
+            <p class="server-name">1.20.1 Forge服务器</p>
+            <p class="server-status">状态: 检查中...</p>
+            <p class="server-address">地址: 1201f.8b1t.top</p>
+        </div>
+        <div id="Java 1.18.2 Forge" class="status-item">
+            <p class="server-name">8B1T经典服务器</p>
+            <p class="server-status">状态: 检查中...</p>
+            <p class="server-address">地址: 1182.8b1t.top</p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 8B1T  All rights reserved.</p>
+    </div>
+
+    <script>
+        // 服务器地址列表
+        const servers = [
+            { ip: '8b1t.top', name: '8B1T主服务器', elementId: 'Java 1.20.4' },
+            { ip: '1201.8b1t.top', name: '1.20.1原版服务器', elementId: 'Java 1.20.1' },
+            { ip: '1201f.8b1t.top', name: '1.20.1 Forge服务器', elementId: 'Java 1.20.1 Forge' },
+            { ip: '1182.8b1t.top', name: '8B1T经典服务器', elementId: 'Java 1.18.2 Forge' },
+            // 按需添加更多服务器的信息
+        ];
+
+        // 检测每个服务器的状态
+        function checkServerStatus(server) {
+            fetch(`https://api.mcstatus.io/v2/status/java/${server.ip}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Server did not return a valid response.');
+                    }
+                })
+                .then(data => {
+                    const serverElement = document.getElementById(server.elementId);
+                    const statusElement = serverElement.querySelector('.server-status');
+                    const statusText = `状态: ${data.online ? '<span class="online">在线 - ' + data.players.online + ' 在线玩家</span>' : '<span class="offline">离线</span>'}`;
+                    statusElement.innerHTML = statusText;
+                })
+                .catch(error => {
+                    const serverElement = document.getElementById(server.elementId);
+                    const statusElement = serverElement.querySelector('.server-status');
+                    statusElement.innerHTML = `状态: <span class="offline">Error - ${error.message}</span>`;
+                });
+        }
+
+        // 对每个服务器运行状态检查
+        servers.forEach(server => {
+            checkServerStatus(server);
+        });
+    </script>
+</body>
+</html>
