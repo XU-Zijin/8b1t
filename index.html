@@ -65,8 +65,51 @@
     <!-- Add more content here -->
 </div>
 
+<div id="announcement-bar"></div>
+<script>
+    // 获取公告栏元素
+    var announcementBar = document.getElementById('announcement-bar');
+
+    // 从logs.json中获取日志文件列表，并用fetch请求每个文件
+    fetch('/log/logs.json')
+        .then(response => response.json()) // 解析JSON文件
+        .then(logFiles => {
+            // 只获取最近的10个日志文件
+            var latestLogFiles = logFiles.slice(-10);
+            var announcementsLoaded = 0;
+
+            // 请求每一个日志文件并获取内容
+            latestLogFiles.forEach(logFileName => {
+                fetch(`/log/${logFileName}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.text();
+                    })
+                    .then(content => {
+                        // 确保公告按文件列表中的顺序显示
+                        latestLogFiles[latestLogFiles.indexOf(logFileName)] = content;
+                        announcementsLoaded++;
+
+                        // 当所有公告都加载完毕时，将它们添加到页面中
+                        if (announcementsLoaded === latestLogFiles.length) {
+                            latestLogFiles.forEach((fileContent) => {
+                                var announcement = document.createElement('p');
+                                announcement.classList.add('announcement');
+                                announcement.textContent = fileContent;
+                                announcementBar.appendChild(announcement);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Failed to load announcement:', error));
+            });
+        })
+        .catch(error => console.error('Failed to load logs list:', error));
+</script>
+
 <div class="footer">
-    <p>&copy; 2024 8B1T  All rights reserved.</p>
+    <p>&copy; 2024 8B1T. All rights reserved.</p>
 </div>
 
 </body>
