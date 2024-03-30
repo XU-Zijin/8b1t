@@ -15,11 +15,14 @@
         }
         .header {
             background-color: #222;
-            padding: 10px;
+            padding: 10px; 
+            height: 100px; /* 设置一个具体的高度，调整这个值来改变高度 */
+            line-height: 100px;
             text-align: center;
         }
         .header h1 {
             margin: 0;
+            font-size: 3em;
         }
         .nav {
             background-color: #444;
@@ -83,6 +86,12 @@
             <p class="server-name">8B1T主服务器</p>
             <p class="server-status">状态: 检查中...</p>
             <p class="server-address">地址: 8b1t.top</p>
+            <p class="server-name">管理员: rtz 联系方式: 3269429434@qq.com</p>
+        </div>
+        <div id="Java 1.20.4" class="status-item">
+            <p class="server-name">1.20.4空岛生存服</p>
+            <p class="server-status">状态: 检查中...</p>
+            <p class="server-address">地址: 1204.8b1t.top</p>
             <p class="server-name">管理员: hjh 联系方式: </p>
         </div>
         <div id="Java 1.20.1 Forge" class="status-item">
@@ -99,13 +108,14 @@
         </div>
     </div>
     <div class="footer">
-        <p>&copy; 2024 8B1T. All rights reserved.</p>
+        <p>&copy; 2024 8B1T.</p>
     </div>
 
     <script>
         // 服务器地址列表
         const servers = [
             { ip: '8b1t.top', name: '8B1T主服务器', elementId: 'Java 1.20.4' },
+            { ip: '1204.8b1t.top', name: '1.20.4空岛生存服', elementId: 'Java 1.20.4' },
             { ip: '1201f.8b1t.top', name: '1.20.1 Forge服务器', elementId: 'Java 1.20.1 Forge' },
             { ip: '1182.8b1t.top', name: '8B1T经典服务器', elementId: 'Java 1.18.2 Forge' },
             // 按需添加更多服务器的信息
