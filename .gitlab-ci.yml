@@ -1,19 +1,11 @@
-image: node:20.11.0
-
-cache:
-  paths:
-    - node_modules/
-
-before_script:
-  - npm install hexo-cli -g
-  - test -e package.json && npm install
-  - hexo generate
-
 pages:
+  stage: deploy
   script:
-    - hexo generate
+    - mkdir .public
+    - cp -r * .public
+    - mv .public public
   artifacts:
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  only:
+    - main
